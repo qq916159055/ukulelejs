@@ -5,14 +5,12 @@ module.exports = function (config) {
 	config.set({
 		browsers: ['PhantomJS'],
 		files: [
-			{
-				pattern: 'test-context.js',
-				watched: false
-			}
+			'test/**/*.js',
+			'node_modules/babel-polyfill/dist/polyfill.js'
         ],
 		frameworks: ['jasmine'],
 		preprocessors: {
-			'test-context.js': ['webpack']
+			'test/**/*.js':['webpack']
 		},
 		webpack: {
 			module: {
