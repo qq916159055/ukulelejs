@@ -1,66 +1,33 @@
 // Karma configuration
-// Generated on Wed Jun 24 2015 00:04:53 GMT+0800 (中国标准时间)
+// Generated on Fri Oct 30 2015 22:10:10 GMT+0900 (JST)
 
-module.exports = function(config) {
-  config.set({
-
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
-
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
-
-
-    // list of files / patterns to load in the browser
-    files: [
-      'src/ukulele/extend/*.js',  
-      'src/ukulele/util/*.js',
-      'test/**/*Spec.js'
-    ],
-
-
-    // list of files to exclude
-    exclude: [
-    ],
-
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-    },
-
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
-
-
-    // web server port
-    port: 9876,
-
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
-
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
-  });
-};
+module.exports = function (config) {
+	config.set({
+		browsers: ['PhantomJS'],
+		files: [
+			{
+				pattern: 'test-context.js',
+				watched: false
+			}
+        ],
+		frameworks: ['jasmine'],
+		preprocessors: {
+			'test-context.js': ['webpack']
+		},
+		webpack: {
+			module: {
+				loaders: [
+					{
+						test: /\.js/,
+						exclude: /node_modules/,
+						loader: 'babel-loader'
+					}
+                ]
+			},
+			watch: true
+		},
+		webpackServer: {
+			noInfo: true
+		}
+	});
+}

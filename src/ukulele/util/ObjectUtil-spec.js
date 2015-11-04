@@ -1,5 +1,17 @@
+import {ObjectUtil} from '../../../src/ukulele/util/ObjectUtil';
 describe("ObjectUtil Test Suite", function () {
-    var arrType1, arrType2, stringType, numberType, booleanType, nullType, undefinedType, blankStringType, zeroType, dateType, objectType, functionType;
+    let arrType1;
+    let arrType2;
+    let stringType;
+    let numberType; 
+    let booleanType;
+    let nullType;
+    let undefinedType; 
+    let blankStringType; 
+    let zeroType;
+    let dateType;
+    let objectType;
+    let functionType;
 
     beforeAll(function () {
         arrType1 = [];
@@ -18,12 +30,12 @@ describe("ObjectUtil Test Suite", function () {
 
     it("test isArray", function () {
 
-        var result1 = ObjectUtil.isArray(arrType1);
-        var result2 = ObjectUtil.isArray(arrType2);
-        var result3 = ObjectUtil.isArray(stringType);
-        var result4 = ObjectUtil.isArray(booleanType);
-        var result5 = ObjectUtil.isArray(nullType);
-        var result6 = ObjectUtil.isArray(undefinedType);
+        let result1 = ObjectUtil.isArray(arrType1);
+        let result2 = ObjectUtil.isArray(arrType2);
+        let result3 = ObjectUtil.isArray(stringType);
+        let result4 = ObjectUtil.isArray(booleanType);
+        let result5 = ObjectUtil.isArray(nullType);
+        let result6 = ObjectUtil.isArray(undefinedType);
 
         expect(result1).toBe(true);
         expect(result2).toBe(true);
@@ -55,17 +67,16 @@ describe("ObjectUtil Test Suite", function () {
             this.sex = "male";
             this.children = [{'name':'lowe','sex':'male'}];
         }
-        var inst = new ClassA();
-        var cloneObject = ObjectUtil.deepClone(inst);
+        let inst = new ClassA();
+        let cloneObject = ObjectUtil.deepClone(inst);
         expect(cloneObject.name).toBe(inst.name);
         expect(cloneObject.sex).toBe(inst.sex);
         expect(cloneObject.children.length).toBe(inst.children.length);
         
-        for(var i=0;i<cloneObject.children.length;i++){
-            var cloneChild = cloneObject.children[i];
-            var instChild = inst.children[i];
+        for(let i=0;i<cloneObject.children.length;i++){
+            let cloneChild = cloneObject.children[i];
+            let instChild = inst.children[i];
             expect(cloneChild.name).toBe(instChild.name);
         }
-        
     });
 });
