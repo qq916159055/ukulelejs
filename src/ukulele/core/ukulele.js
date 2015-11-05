@@ -1,13 +1,15 @@
-/**
- * Create a new Ukulele
- * @class
- */
-
-function Ukulele() {
-    "use strict";
+import {UkuleleUtil} from '../util/UkuleleUtil';
+import {Selector} from '../extend/Selector';
+import {elementChangedBinder} from '../core/ElementActionBinder';
+import {ControllerModel} from '../model/ControllerModel';
+import {BoundItemAttribute} from '../model/BoundItemAttribute';
+import {BoundItemExpression} from '../model/BoundItemExpression';
+import {BoundItemInnerText} from '../model/BoundItemInnerText';
+import {BoundItemRepeat} from '../model/BoundItemRepeat';
+export function Ukulele() {
     var controllersDefinition = {};
     var copyControllers = {};
-    var self = this;
+    var self = this;  
     /**
      * @access a callback function when view was refreshed.
      */

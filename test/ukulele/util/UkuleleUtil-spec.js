@@ -1,5 +1,5 @@
 import {UkuleleUtil} from '../../../src/ukulele/util/UkuleleUtil';
-describe("UkuleleUtil Test Suite", function () {
+xdescribe("UkuleleUtil Test Suite", function () {
     it("test getFinalAttribute", function () {
         let expression1 = "myCtrl.name";
         let attr = UkuleleUtil.getFinalAttribute(expression1);

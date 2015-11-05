@@ -1,3 +1,4 @@
+import {UkuleleUtil} from '../util/UkuleleUtil';
 function elementChangedBinder(element, tagName, controllerModel, handler) {
     var elementStrategies = [inputTextCase, textareaCase, selectCase, checkboxCase, radioCase];
     for (var i = 0; i < elementStrategies.length; i++) {
@@ -8,7 +9,6 @@ function elementChangedBinder(element, tagName, controllerModel, handler) {
         }
     }
 }
-
 
 function inputTextCase(element, tagName, controllerModel, handler) {
     var elementName = element.tagName;
@@ -144,3 +144,5 @@ function radioCase(element, tagName, controllerModel, handler) {
     }
     return false;
 }
+
+export {elementChangedBinder};

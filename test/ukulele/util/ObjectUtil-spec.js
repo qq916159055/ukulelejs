@@ -1,5 +1,5 @@
 import {ObjectUtil} from '../../../src/ukulele/util/ObjectUtil';
-describe("ObjectUtil Test Suite", function () {
+xdescribe("ObjectUtil Test Suite", function () {
     let arrType1;
     let arrType2;
     let stringType;

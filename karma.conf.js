@@ -3,9 +3,10 @@
 
 module.exports = function (config) {
 	config.set({
-		browsers: ['PhantomJS'],
+		browsers: ['PhantomJS'], //['Chrome']
 		files: [
 			'test/**/*.js',
+			'test/**/*.html',
 			'node_modules/babel-polyfill/dist/polyfill.js'
         ],
 		frameworks: ['jasmine'],

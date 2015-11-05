@@ -1,5 +1,5 @@
 "use strict";
-import {Selector} from '../extend/selector';
+import {Selector} from '../extend/Selector';
 export class UkuleleUtil{
     static getFinalAttribute(expression){
         let temp = expression.split(".");
