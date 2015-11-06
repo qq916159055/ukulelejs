@@ -1,4 +1,5 @@
 import {UkuleleUtil} from '../util/UkuleleUtil';
+import {ObjectUtil} from '../util/ObjectUtil';
 import {Selector} from '../extend/Selector';
 import {elementChangedBinder} from '../core/ElementActionBinder';
 import {ControllerModel} from '../model/ControllerModel';

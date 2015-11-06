@@ -5,6 +5,12 @@ require.config({
 });
 
 require(['Ukulele'],function(ukulib){
-	var Uku = ukulib.Ukulele;
-	console.log(new Uku());
+	var Ukulele = ukulib.Ukulele;
+	var uku = new Ukulele();
+	uku.registerController('myCtrl',new MyController());
+	uku.init();
+	
+	function MyController(uku){
+		this.message = 'hello webpack, hello babel, hello ukujs';
+	}
 });	

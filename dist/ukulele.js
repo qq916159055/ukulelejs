@@ -1,4 +1,4 @@
-define("uku", [], function() { return /******/ (function(modules) { // webpackBootstrap
+define(function() { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -53,19 +53,21 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 
 	var _UkuleleUtil = __webpack_require__(1);
 
+	var _ObjectUtil = __webpack_require__(3);
+
 	var _Selector = __webpack_require__(2);
 
-	var _ElementActionBinder = __webpack_require__(3);
+	var _ElementActionBinder = __webpack_require__(4);
 
-	var _ControllerModel = __webpack_require__(4);
+	var _ControllerModel = __webpack_require__(5);
 
-	var _BoundItemAttribute = __webpack_require__(5);
+	var _BoundItemAttribute = __webpack_require__(6);
 
-	var _BoundItemExpression = __webpack_require__(7);
+	var _BoundItemExpression = __webpack_require__(8);
 
-	var _BoundItemInnerText = __webpack_require__(8);
+	var _BoundItemInnerText = __webpack_require__(9);
 
-	var _BoundItemRepeat = __webpack_require__(9);
+	var _BoundItemRepeat = __webpack_require__(10);
 
 	function Ukulele() {
 	    var controllersDefinition = {};
@@ -164,7 +166,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	        if (ctrlAliasName) {
 	            if (typeof ctrlAliasName === "string") {
 	                watchController(ctrlAliasName);
-	            } else if (ObjectUtil.isArray(ctrlAliasName)) {
+	            } else if (_ObjectUtil.ObjectUtil.isArray(ctrlAliasName)) {
 	                for (var i = 0; i < ctrlAliasName.length; i++) {
 	                    watchController(ctrlAliasName[i]);
 	                }
@@ -194,7 +196,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	                    }
 	                    var finalValue = _UkuleleUtil.UkuleleUtil.getFinalValue(self, controller, attrName);
 	                    var previousFinalValue = _UkuleleUtil.UkuleleUtil.getFinalValue(self, previousCtrlModel, attrName);
-	                    if (!ObjectUtil.compare(previousFinalValue, finalValue)) {
+	                    if (!_ObjectUtil.ObjectUtil.compare(previousFinalValue, finalValue)) {
 	                        attrName = boundItem.attributeName;
 	                        var changedBoundItems = controllerModel.getBoundItemsByName(attrName);
 	                        for (var j = 0; j < changedBoundItems.length; j++) {
@@ -220,7 +222,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	    }
 
 	    function copyControllerInstance(controller, alias) {
-	        var previousCtrlModel = ObjectUtil.deepClone(controller);
+	        var previousCtrlModel = _ObjectUtil.ObjectUtil.deepClone(controller);
 	        delete copyControllers[alias];
 	        copyControllers[alias] = previousCtrlModel;
 	    }
@@ -799,6 +801,103 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var ObjectUtil = exports.ObjectUtil = (function () {
+	    function ObjectUtil() {
+	        _classCallCheck(this, ObjectUtil);
+	    }
+
+	    _createClass(ObjectUtil, null, [{
+	        key: "isArray",
+	        value: function isArray(obj) {
+	            return Object.prototype.toString.call(obj) === '[object Array]';
+	        }
+	    }, {
+	        key: "getType",
+	        value: function getType(obj) {
+	            var type = typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	            if (type === "object") {
+	                if (ObjectUtil.isArray(obj)) {
+	                    return "array";
+	                } else {
+	                    return type;
+	                }
+	            } else {
+	                return type;
+	            }
+	        }
+	    }, {
+	        key: "compare",
+	        value: function compare(objA, objB) {
+	            var typeA = ObjectUtil.getType(objA);
+	            var typeB = ObjectUtil.getType(objB);
+	            var result = true;
+	            if (typeA !== typeB) {
+	                return false;
+	            } else {
+	                switch (typeA) {
+	                    case "object":
+	                        for (var key in objA) {
+	                            var valuA = objA[key];
+	                            var valuB = objB[key];
+	                            var isEqual = ObjectUtil.compare(valuA, valuB);
+	                            if (!isEqual) {
+	                                result = false;
+	                                break;
+	                            }
+	                        }
+	                        break;
+	                    case "array":
+	                        if (objA.length === objB.length) {
+	                            for (var i = 0; i < objA.length; i++) {
+	                                var itemA = objA[i];
+	                                var itemB = objB[i];
+	                                var isEqual2 = ObjectUtil.compare(itemA, itemB);
+	                                if (!isEqual2) {
+	                                    result = false;
+	                                    break;
+	                                }
+	                            }
+	                        } else {
+	                            result = false;
+	                        }
+	                        break;
+	                    case "function":
+	                        result = objA.toString() === objB.toString();
+	                        break;
+	                    default:
+	                        result = objA === objB;
+	                        break;
+	                }
+	            }
+	            return result;
+	        }
+	    }, {
+	        key: "deepClone",
+	        value: function deepClone(origin) {
+	            var originProto = Object.getPrototypeOf(origin);
+	            return Object.assign(Object.create(originProto), origin);
+	        }
+	    }]);
+
+	    return ObjectUtil;
+	})();
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -958,7 +1057,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	exports.elementChangedBinder = elementChangedBinder;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1003,7 +1102,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	})();
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1015,7 +1114,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	});
 	exports.BoundItemAttribute = undefined;
 
-	var _BoundItemBase2 = __webpack_require__(6);
+	var _BoundItemBase2 = __webpack_require__(7);
 
 	var _UkuleleUtil = __webpack_require__(1);
 
@@ -1086,7 +1185,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	})(_BoundItemBase2.BoundItemBase);
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1106,7 +1205,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	};
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1118,7 +1217,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	});
 	exports.BoundItemExpression = undefined;
 
-	var _BoundItemBase2 = __webpack_require__(6);
+	var _BoundItemBase2 = __webpack_require__(7);
 
 	var _UkuleleUtil = __webpack_require__(1);
 
@@ -1154,7 +1253,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	})(_BoundItemBase2.BoundItemBase);
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1166,7 +1265,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	});
 	exports.BoundItemInnerText = undefined;
 
-	var _BoundItemBase2 = __webpack_require__(6);
+	var _BoundItemBase2 = __webpack_require__(7);
 
 	var _UkuleleUtil = __webpack_require__(1);
 
@@ -1200,7 +1299,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	})(_BoundItemBase2.BoundItemBase);
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1212,7 +1311,7 @@ define("uku", [], function() { return /******/ (function(modules) { // webpackBo
 	});
 	exports.BoundItemRepeat = undefined;
 
-	var _BoundItemBase2 = __webpack_require__(6);
+	var _BoundItemBase2 = __webpack_require__(7);
 
 	var _UkuleleUtil = __webpack_require__(1);
 

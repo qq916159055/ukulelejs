@@ -4,7 +4,6 @@ module.exports = {
 	output: {
 		path: './dist',
 		filename: "Ukulele.js",
-		library: 'uku',
 		libraryTarget: "amd"
 	},
 	module: {
