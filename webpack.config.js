@@ -2,7 +2,7 @@
 module.exports = {
 	entry: "./src/ukulele/core/Ukulele.js",
 	output: {
-		path: './dist',
+		/*path: './dist',*/
 		filename: "Ukulele.js",
 		libraryTarget: "amd"
 	},

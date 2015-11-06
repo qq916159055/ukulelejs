@@ -326,56 +326,58 @@ define(function() { return /******/ (function(modules) { // webpackBootstrap
 	                        retFunc();
 	                    }
 	                } else {
-	                    var src = tag.getAttribute("src");
-	                    var replace = tag.getAttribute("replace");
-	                    var replaceController = tag.getAttribute("replace-controller");
-	                    var ajax = new Ajax();
-	                    if (replace && replace === "true") {
-	                        (function (x) {
-	                            ajax.get(src, function (html) {
-	                                if (replaceController) {
-	                                    html = doReplace(html, replaceController);
-	                                }
-	                                x.insertAdjacentHTML('beforeBegin', html);
-	                                var htmlDom = x.previousElementSibling;
-	                                x.parentNode.removeChild(x);
-	                                onloadHandlerQueue.push({
-	                                    'func': runOnLoadFunc,
-	                                    'args': [x, htmlDom]
-	                                });
-	                                searchIncludeTag(htmlDom, function () {
-	                                    index++;
-	                                    if (index < tags.length) {
-	                                        dealWithInclude(index);
-	                                    } else {
-	                                        retFunc();
+	                    (function () {
+	                        var src = tag.getAttribute("src");
+	                        var replace = tag.getAttribute("replace");
+	                        var replaceController = tag.getAttribute("replace-controller");
+	                        var ajax = new Ajax();
+	                        if (replace && replace === "true") {
+	                            (function (x) {
+	                                ajax.get(src, function (html) {
+	                                    if (replaceController) {
+	                                        html = doReplace(html, replaceController);
 	                                    }
+	                                    x.insertAdjacentHTML('beforeBegin', html);
+	                                    var htmlDom = x.previousElementSibling;
+	                                    x.parentNode.removeChild(x);
+	                                    onloadHandlerQueue.push({
+	                                        'func': runOnLoadFunc,
+	                                        'args': [x, htmlDom]
+	                                    });
+	                                    searchIncludeTag(htmlDom, function () {
+	                                        index++;
+	                                        if (index < tags.length) {
+	                                            dealWithInclude(index);
+	                                        } else {
+	                                            retFunc();
+	                                        }
+	                                    });
 	                                });
-	                            });
-	                        })(tag);
-	                    } else {
-	                        (function (x) {
-	                            ajax.get(src, function (html) {
-	                                if (replaceController) {
-	                                    html = doReplace(html, replaceController);
-	                                }
-	                                x.insertAdjacentHTML('afterBegin', html);
-	                                x.classList.remove('uku-include');
-	                                onloadHandlerQueue.push({
-	                                    'func': runOnLoadFunc,
-	                                    'args': [x]
-	                                });
-	                                searchIncludeTag(x, function () {
-	                                    index++;
-	                                    if (index < tags.length) {
-	                                        dealWithInclude(index);
-	                                    } else {
-	                                        retFunc();
+	                            })(tag);
+	                        } else {
+	                            (function (x) {
+	                                ajax.get(src, function (html) {
+	                                    if (replaceController) {
+	                                        html = doReplace(html, replaceController);
 	                                    }
+	                                    x.insertAdjacentHTML('afterBegin', html);
+	                                    x.classList.remove('uku-include');
+	                                    onloadHandlerQueue.push({
+	                                        'func': runOnLoadFunc,
+	                                        'args': [x]
+	                                    });
+	                                    searchIncludeTag(x, function () {
+	                                        index++;
+	                                        if (index < tags.length) {
+	                                            dealWithInclude(index);
+	                                        } else {
+	                                            retFunc();
+	                                        }
+	                                    });
 	                                });
-	                            });
-	                        })(tag);
-	                    }
+	                            })(tag);
+	                        }
+	                    })();
 	                }
 
 	                function runOnLoadFunc(hostElement, replaceElement) {
@@ -420,10 +422,10 @@ define(function() { return /******/ (function(modules) { // webpackBootstrap
 	            //通常的花括号声明方式
 	            var expression = _Selector.Selector.directText(element);
 	            if (_UkuleleUtil.UkuleleUtil.searchUkuExpTag(expression) !== -1) {
-	                var attr = expression.slice(2, -2);
-	                var controllerModel = getBoundControllerModelByName(attr);
+	                var _attr = expression.slice(2, -2);
+	                var controllerModel = getBoundControllerModelByName(_attr);
 	                if (controllerModel) {
-	                    var boundItem = new _BoundItemExpression.BoundItemExpression(attr, expression, element, self);
+	                    var boundItem = new _BoundItemExpression.BoundItemExpression(_attr, expression, element, self);
 	                    controllerModel.addBoundItem(boundItem);
 	                    boundItem.render(controllerModel.controllerInstance);
 	                }
@@ -461,19 +463,21 @@ define(function() { return /******/ (function(modules) { // webpackBootstrap
 	            var eventNameInListener = eventName.substring(2);
 	            var controllerModel = getBoundControllerModelByName(expression);
 	            if (controllerModel) {
-	                var controller = controllerModel.controllerInstance;
-	                var temArr = expression.split(".");
-	                var alias;
-	                if (temArr[0] === "parent") {
-	                    alias = temArr[1];
-	                } else {
-	                    alias = temArr[0];
-	                }
-	                element.addEventListener(eventNameInListener, function (event) {
-	                    copyControllerInstance(controller, alias);
-	                    getBoundAttributeValue(expression, arguments);
-	                    runDirtyChecking(alias);
-	                });
+	                (function () {
+	                    var controller = controllerModel.controllerInstance;
+	                    var temArr = expression.split(".");
+	                    var alias = undefined;
+	                    if (temArr[0] === "parent") {
+	                        alias = temArr[1];
+	                    } else {
+	                        alias = temArr[0];
+	                    }
+	                    element.addEventListener(eventNameInListener, function (event) {
+	                        copyControllerInstance(controller, alias);
+	                        getBoundAttributeValue(expression, arguments);
+	                        runDirtyChecking(alias);
+	                    });
+	                })();
 	            }
 	        }
 	        //处理 repeat

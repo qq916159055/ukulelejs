@@ -8,9 +8,9 @@ import {BoundItemExpression} from '../model/BoundItemExpression';
 import {BoundItemInnerText} from '../model/BoundItemInnerText';
 import {BoundItemRepeat} from '../model/BoundItemRepeat';
 export function Ukulele() {
-    var controllersDefinition = {};
-    var copyControllers = {};
-    var self = this;  
+    let controllersDefinition = {};
+    let copyControllers = {};
+    let self = this;  
     /**
      * @access a callback function when view was refreshed.
      */
@@ -33,7 +33,7 @@ export function Ukulele() {
      * @param {object}  controllerInst controller's instance
      */
     this.registerController = function (instanceName, controllerInst) {
-        var controllerModel = new ControllerModel(instanceName, controllerInst);
+        let controllerModel = new ControllerModel(instanceName, controllerInst);
         controllersDefinition[instanceName] = controllerModel;
     };
     /**
@@ -73,7 +73,7 @@ export function Ukulele() {
      * @param {string} expression
      */
     this.getFinalValueByExpression = function (expression) {
-        var controller = this.getControllerModelByName(expression).controllerInstance;
+        let controller = this.getControllerModelByName(expression).controllerInstance;
         return UkuleleUtil.getFinalValue(this, controller, expression);
     };
 
@@ -83,9 +83,9 @@ export function Ukulele() {
      * @param {function} callback function 
      */
     this.watch = function (expression, callback) {
-        var controllerModel = getBoundControllerModelByName(expression);
+        let controllerModel = getBoundControllerModelByName(expression);
         if (controllerModel) {
-            var boundItem = new BoundItemAttribute(attr, tagName, element, self);
+            let boundItem = new BoundItemAttribute(attr, tagName, element, self);
             controllerModel.addBoundItem(boundItem);
             boundItem.render(controllerModel.controllerInstance);
 
@@ -107,40 +107,40 @@ export function Ukulele() {
             if (typeof (ctrlAliasName) === "string") {
                 watchController(ctrlAliasName);
             } else if (ObjectUtil.isArray(ctrlAliasName)) {
-                for (var i = 0; i < ctrlAliasName.length; i++) {
+                for (let i = 0; i < ctrlAliasName.length; i++) {
                     watchController(ctrlAliasName[i]);
                 }
             }
         } else {
-            for (var alias in controllersDefinition) {
+            for (let alias in controllersDefinition) {
                 watchController(alias);
             }
         }
 
         function watchController(alias) {
-            var controllerModel = controllersDefinition[alias];
+            let controllerModel = controllersDefinition[alias];
             if (!controllerModel) {
                 if (self.parentUku) {
                     self.parentUku.refresh(alias);
                 }
                 return;
             }
-            var controller = controllerModel.controllerInstance;
-            var previousCtrlModel = copyControllers[alias];
-            for (var i = 0; i < controllerModel.boundItems.length; i++) {
-                var boundItem = controllerModel.boundItems[i];
-                var attrName = boundItem.attributeName;
+            let controller = controllerModel.controllerInstance;
+            let previousCtrlModel = copyControllers[alias];
+            for (let i = 0; i < controllerModel.boundItems.length; i++) {
+                let boundItem = controllerModel.boundItems[i];
+                let attrName = boundItem.attributeName;
                 if (previousCtrlModel) {
                     if (boundItem.ukuTag === "selected") {
                         attrName = attrName.split("|")[0];
                     }
-                    var finalValue = UkuleleUtil.getFinalValue(self, controller, attrName);
-                    var previousFinalValue = UkuleleUtil.getFinalValue(self, previousCtrlModel, attrName);
+                    let finalValue = UkuleleUtil.getFinalValue(self, controller, attrName);
+                    let previousFinalValue = UkuleleUtil.getFinalValue(self, previousCtrlModel, attrName);
                     if (!ObjectUtil.compare(previousFinalValue, finalValue)) {
                         attrName = boundItem.attributeName;
-                        var changedBoundItems = controllerModel.getBoundItemsByName(attrName);
-                        for (var j = 0; j < changedBoundItems.length; j++) {
-                            var changedBoundItem = changedBoundItems[j];
+                        let changedBoundItems = controllerModel.getBoundItemsByName(attrName);
+                        for (let j = 0; j < changedBoundItems.length; j++) {
+                            let changedBoundItem = changedBoundItems[j];
                             changedBoundItem.render(controller);
                         }
                         if (self.refreshHandler) {
@@ -154,15 +154,15 @@ export function Ukulele() {
     }
 
     function copyAllController() {
-        for (var alias in controllersDefinition) {
-            var controllerModel = controllersDefinition[alias];
-            var controller = controllerModel.controllerInstance;
+        for (let alias in controllersDefinition) {
+            let controllerModel = controllersDefinition[alias];
+            let controller = controllerModel.controllerInstance;
             copyControllerInstance(controller, alias);
         }
     }
 
     function copyControllerInstance(controller, alias) {
-        var previousCtrlModel = ObjectUtil.deepClone(controller);
+        let previousCtrlModel = ObjectUtil.deepClone(controller);
         delete copyControllers[alias];
         copyControllers[alias] = previousCtrlModel;
     }
@@ -170,33 +170,33 @@ export function Ukulele() {
 
     //解析html中各个uku的tag
     function analyizeElement(element) {
-        var onloadHandlerQueue = [];
+        let onloadHandlerQueue = [];
         searchIncludeTag(element, function () {
-            var subElements = [];
+            let subElements = [];
             //scan element which has uku-* tag
-            var isSelfHasUkuTag = Selector.fuzzyFind(element, 'uku-');
+            let isSelfHasUkuTag = Selector.fuzzyFind(element, 'uku-');
             if (isSelfHasUkuTag) {
                 subElements.push(isSelfHasUkuTag);
             }
-            var allChildren = element.querySelectorAll("*");
-            for (var i = 0; i < allChildren.length; i++) {
-                var child = allChildren[i];
-                var matchElement = Selector.fuzzyFind(child, 'uku-');
+            let allChildren = element.querySelectorAll("*");
+            for (let i = 0; i < allChildren.length; i++) {
+                let child = allChildren[i];
+                let matchElement = Selector.fuzzyFind(child, 'uku-');
                 if (matchElement && !UkuleleUtil.isInRepeat(matchElement)) {
                     subElements.push(matchElement);
                 }
             }
             searchExpression(element);
             //解析绑定 attribute，注册event
-            for (var n = 0; n < subElements.length; n++) {
-                var subElement = subElements[n];
-                var orderAttrs = sortAttributes(subElement);
-                for (var j = 0; j < orderAttrs.length; j++) {
-                    var attribute = orderAttrs[j];
+            for (let n = 0; n < subElements.length; n++) {
+                let subElement = subElements[n];
+                let orderAttrs = sortAttributes(subElement);
+                for (let j = 0; j < orderAttrs.length; j++) {
+                    let attribute = orderAttrs[j];
                     if (UkuleleUtil.searchUkuAttrTag(attribute.nodeName) > -1) {
-                        var tempArr = attribute.nodeName.split('-');
+                        let tempArr = attribute.nodeName.split('-');
                         tempArr.shift();
-                        var attrName = tempArr.join('-');
+                        let attrName = tempArr.join('-');
                         if (attrName !== "application") {
                             if (attrName.search('on') === 0) {
                                 //is an event
@@ -223,7 +223,7 @@ export function Ukulele() {
                 }
             }
             while (onloadHandlerQueue.length > 0) {
-                var handler = onloadHandlerQueue.pop();
+                let handler = onloadHandlerQueue.pop();
                 handler.func.apply(this, handler.args);
             }
 
@@ -236,9 +236,9 @@ export function Ukulele() {
             copyAllController();
 
             function sortAttributes(subElement) {
-                var orderAttrs = [];
-                for (var i = 0; i < subElement.attributes.length; i++) {
-                    var attribute = subElement.attributes[i];
+                let orderAttrs = [];
+                for (let i = 0; i < subElement.attributes.length; i++) {
+                    let attribute = subElement.attributes[i];
                     if (attribute.nodeName.search("uku-on") !== -1) {
                         orderAttrs.push(attribute);
                     } else {
@@ -251,8 +251,8 @@ export function Ukulele() {
 
 
         function searchIncludeTag(element, retFunc) {
-            var tags = element.querySelectorAll('.uku-include');
-            var index = 0;
+            let tags = element.querySelectorAll('.uku-include');
+            let index = 0;
             if (index < tags.length) {
                 dealWithInclude(index);
             } else {
@@ -260,8 +260,8 @@ export function Ukulele() {
             }
 
             function dealWithInclude(index) {
-                var tag = tags[index];
-                var isLoad = tag.getAttribute("load");
+                let tag = tags[index];
+                let isLoad = tag.getAttribute("load");
                 if (isLoad === "false") {
                     index++;
                     if (index < tags.length) {
@@ -270,10 +270,10 @@ export function Ukulele() {
                         retFunc();
                     }
                 } else {
-                    var src = tag.getAttribute("src");
-                    var replace = tag.getAttribute("replace");
-                    var replaceController = tag.getAttribute("replace-controller");
-                    var ajax = new Ajax();
+                    let src = tag.getAttribute("src");
+                    let replace = tag.getAttribute("replace");
+                    let replaceController = tag.getAttribute("replace-controller");
+                    let ajax = new Ajax();
                     if (replace && replace === "true") {
                         (function (x) {
                             ajax.get(src, function (html) {
@@ -281,7 +281,7 @@ export function Ukulele() {
                                     html = doReplace(html, replaceController);
                                 }
                                 x.insertAdjacentHTML('beforeBegin', html);
-                                var htmlDom = x.previousElementSibling;
+                                let htmlDom = x.previousElementSibling;
                                 x.parentNode.removeChild(x);
                                 onloadHandlerQueue.push({
                                     'func': runOnLoadFunc,
@@ -324,7 +324,7 @@ export function Ukulele() {
                 }
 
                 function runOnLoadFunc(hostElement, replaceElement) {
-                    var expression = hostElement.getAttribute("uku-onload");
+                    let expression = hostElement.getAttribute("uku-onload");
                     if (expression) {
                         if (replaceElement) {
                             getBoundAttributeValue(expression, [replaceElement]);
@@ -335,10 +335,10 @@ export function Ukulele() {
                 }
 
                 function doReplace(html, replaceController) {
-                    var tempArr = replaceController.split("|");
+                    let tempArr = replaceController.split("|");
                     if (tempArr && tempArr.length === 2) {
-                        var oldCtrl = tempArr[0];
-                        var newCtrl = tempArr[1];
+                        let oldCtrl = tempArr[0];
+                        let newCtrl = tempArr[1];
                         html = html.replace(new RegExp(oldCtrl, "gm"), newCtrl);
                         return html;
                     } else {
@@ -356,19 +356,19 @@ export function Ukulele() {
                     dealWithExpression(element);
                 }
             }
-            for (var i = 0; i < element.children.length; i++) {
+            for (let i = 0; i < element.children.length; i++) {
                 searchExpression(element.children[i]);
             }
         }
         //处理绑定的expression
         function dealWithExpression(element) {
             //通常的花括号声明方式
-            var expression = Selector.directText(element);
+            let expression = Selector.directText(element);
             if (UkuleleUtil.searchUkuExpTag(expression) !== -1) {
-                var attr = expression.slice(2, -2);
-                var controllerModel = getBoundControllerModelByName(attr);
+                let attr = expression.slice(2, -2);
+                let controllerModel = getBoundControllerModelByName(attr);
                 if (controllerModel) {
-                    var boundItem = new BoundItemExpression(attr, expression, element, self);
+                    let boundItem = new BoundItemExpression(attr, expression, element, self);
                     controllerModel.addBoundItem(boundItem);
                     boundItem.render(controllerModel.controllerInstance);
                 }
@@ -376,11 +376,11 @@ export function Ukulele() {
         }
         //处理绑定的attribute
         function dealWithAttribute(element, tagName) {
-            var attr = element.getAttribute("uku-" + tagName);
-            var elementName = element.tagName;
-            var controllerModel = getBoundControllerModelByName(attr);
+            let attr = element.getAttribute("uku-" + tagName);
+            let elementName = element.tagName;
+            let controllerModel = getBoundControllerModelByName(attr);
             if (controllerModel) {
-                var boundItem = new BoundItemAttribute(attr, tagName, element, self);
+                let boundItem = new BoundItemAttribute(attr, tagName, element, self);
                 controllerModel.addBoundItem(boundItem);
                 boundItem.render(controllerModel.controllerInstance);
                 elementChangedBinder(element, tagName, controllerModel, runDirtyChecking);
@@ -389,11 +389,11 @@ export function Ukulele() {
 
         //
         function dealWithInnerText(element) {
-            var attr = element.getAttribute("uku-text");
+            let attr = element.getAttribute("uku-text");
             if (attr) {
-                var controllerModel = getBoundControllerModelByName(attr);
+                let controllerModel = getBoundControllerModelByName(attr);
                 if (controllerModel) {
-                    var boundItem = new BoundItemInnerText(attr, element, self);
+                    let boundItem = new BoundItemInnerText(attr, element, self);
                     controllerModel.addBoundItem(boundItem);
                     boundItem.render(controllerModel.controllerInstance);
                 }
@@ -402,13 +402,13 @@ export function Ukulele() {
 
         //处理 事件 event
         function dealWithEvent(element, eventName) {
-            var expression = element.getAttribute("uku-" + eventName);
-            var eventNameInListener = eventName.substring(2);
-            var controllerModel = getBoundControllerModelByName(expression);
+            let expression = element.getAttribute("uku-" + eventName);
+            let eventNameInListener = eventName.substring(2);
+            let controllerModel = getBoundControllerModelByName(expression);
             if (controllerModel) {
-                var controller = controllerModel.controllerInstance;
-                var temArr = expression.split(".");
-                var alias;
+                let controller = controllerModel.controllerInstance;
+                let temArr = expression.split(".");
+                let alias;
                 if (temArr[0] === "parent") {
                     alias = temArr[1];
                 } else {
@@ -423,14 +423,14 @@ export function Ukulele() {
         }
         //处理 repeat
         function dealWithRepeat(element) {
-            var repeatExpression = element.getAttribute("uku-repeat");
-            var tempArr = repeatExpression.split(' in ');
-            var itemName = tempArr[0];
-            var attr = tempArr[1];
-            var controllerModel = getBoundControllerModelByName(attr);
+            let repeatExpression = element.getAttribute("uku-repeat");
+            let tempArr = repeatExpression.split(' in ');
+            let itemName = tempArr[0];
+            let attr = tempArr[1];
+            let controllerModel = getBoundControllerModelByName(attr);
             if (controllerModel) {
-                var controllerInst = controllerModel.controllerInstance;
-                var boundItem = new BoundItemRepeat(attr, itemName, element, self);
+                let controllerInst = controllerModel.controllerInstance;
+                let boundItem = new BoundItemRepeat(attr, itemName, element, self);
                 controllerModel.addBoundItem(boundItem);
                 boundItem.render(controllerInst);
             }
@@ -439,11 +439,11 @@ export function Ukulele() {
 
     //根据attrName 确定对应的ControllerModel ，比如  parent.mgr.xxx.yyy来找到以mgr为别名的ControllerModel
     function getBoundControllerModelByName(attrName) {
-        var instanceName = UkuleleUtil.getBoundModelInstantName(attrName);
-        var controllerModel = controllersDefinition[instanceName];
+        let instanceName = UkuleleUtil.getBoundModelInstantName(attrName);
+        let controllerModel = controllersDefinition[instanceName];
         if (!controllerModel) {
-            var tempArr = attrName.split(".");
-            var isParentScope = tempArr[0];
+            let tempArr = attrName.split(".");
+            let isParentScope = tempArr[0];
             if (isParentScope === "parent" && self.parentUku) {
                 tempArr.shift();
                 attrName = tempArr.join(".");
@@ -454,14 +454,14 @@ export function Ukulele() {
     }
 
     function getBoundAttributeValue(attr, additionalArgu) {
-        var controllerModel = getBoundControllerModelByName(attr);
-        var controllerInst = controllerModel.controllerInstance;
-        var result = UkuleleUtil.getFinalValue(self, controllerInst, attr, additionalArgu);
+        let controllerModel = getBoundControllerModelByName(attr);
+        let controllerInst = controllerModel.controllerInstance;
+        let result = UkuleleUtil.getFinalValue(self, controllerInst, attr, additionalArgu);
         return result;
     }
 
     function manageApplication() {
-        var apps = document.querySelectorAll("[uku-application]");
+        let apps = document.querySelectorAll("[uku-application]");
         if (apps.length === 1) {
             analyizeElement(apps[0]);
         } else {

@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        Ukulele: 'dist/Ukulele'
+        Ukulele: 'dist/Ukulele.min'
     }
 });
 
@@ -12,5 +12,8 @@ require(['Ukulele'],function(ukulib){
 	
 	function MyController(uku){
 		this.message = 'hello webpack, hello babel, hello ukujs';
+		this.changeHandler = function(){
+			this.message = this.message + " +1";
+		}
 	}
 });	
