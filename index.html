@@ -2,25 +2,11 @@
 
 <head>
 	<meta charset="utf-8">
-	<script src="//cdn.bootcss.com/seajs/3.0.1/sea.js"></script>
+	<script data-main="main" src="//cdn.bootcss.com/require.js/2.1.20/require.js"></script>
 </head>
 
 <body>
-	
+
 </body>
-<script>
-	seajs.config({
-		alias: {
-			"main": "src_url/main.js",
-			"Ukulele": "lib_url/ukulele.js"
-		},
-		paths:{
-			"lib_url":"/dist",
-			"src_url":"/src"
-		}
-	});
-	seajs.use('main',function(main){
-		main.bootstrap();
-	});
-</script>
+
 </html>

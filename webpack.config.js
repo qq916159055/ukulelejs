@@ -3,7 +3,9 @@ module.exports = {
 	entry: "./src/ukulele/core/Ukulele.js",
 	output: {
 		path: './dist',
-		filename: "Ukulele.js"
+		filename: "Ukulele.js",
+		library: 'uku',
+		libraryTarget: "amd"
 	},
 	module: {
 		loaders: [
