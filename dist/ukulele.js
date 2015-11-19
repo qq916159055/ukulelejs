@@ -279,6 +279,7 @@ define(function() { return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	            }
+	            copyAllController();
 	            while (onloadHandlerQueue.length > 0) {
 	                var handler = onloadHandlerQueue.pop();
 	                handler.func.apply(this, handler.args);
@@ -290,8 +291,6 @@ define(function() { return /******/ (function(modules) { // webpackBootstrap
 	            if (self.initHandler) {
 	                self.initHandler.call(self, element);
 	            }
-	            copyAllController();
-
 	            function sortAttributes(subElement) {
 	                var orderAttrs = [];
 	                for (var i = 0; i < subElement.attributes.length; i++) {

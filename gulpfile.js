@@ -5,7 +5,7 @@ var rename = require('gulp-rename');
 var webpack = require('webpack-stream');
 
 gulp.task('clean', function () {
-	return gulp.src(['dist/*.js'])
+	return gulp.src(['dist/*'])
 		.pipe(clean());
 });
 

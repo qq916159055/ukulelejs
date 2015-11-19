@@ -102,7 +102,7 @@ export function Ukulele() {
     };
 
     //脏检测
-    function runDirtyChecking(ctrlAliasName) {
+    function runDirtyChecking(ctrlAliasName, excludeElement) {
         if (ctrlAliasName) {
             if (typeof (ctrlAliasName) === "string") {
                 watchController(ctrlAliasName);
@@ -141,7 +141,9 @@ export function Ukulele() {
                         let changedBoundItems = controllerModel.getBoundItemsByName(attrName);
                         for (let j = 0; j < changedBoundItems.length; j++) {
                             let changedBoundItem = changedBoundItems[j];
-                            changedBoundItem.render(controller);
+							if(changedBoundItem.element !== excludeElement){
+								changedBoundItem.render(controller);
+							}
                         }
                         if (self.refreshHandler) {
                             self.refreshHandler.call(self);
@@ -222,6 +224,7 @@ export function Ukulele() {
                     }
                 }
             }
+			copyAllController();
             while (onloadHandlerQueue.length > 0) {
                 let handler = onloadHandlerQueue.pop();
                 handler.func.apply(this, handler.args);
@@ -233,8 +236,6 @@ export function Ukulele() {
             if (self.initHandler) {
                 self.initHandler.call(self, element);
             }
-            copyAllController();
-
             function sortAttributes(subElement) {
                 let orderAttrs = [];
                 for (let i = 0; i < subElement.attributes.length; i++) {
@@ -417,7 +418,7 @@ export function Ukulele() {
                 element.addEventListener(eventNameInListener, function (event) {
                     copyControllerInstance(controller, alias);
                     getBoundAttributeValue(expression, arguments);
-                    runDirtyChecking(alias);
+                    runDirtyChecking(alias, element);
                 });
             }
         }
